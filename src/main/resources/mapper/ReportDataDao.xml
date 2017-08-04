@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.richard.java8use.dao.ReportDataDao">
+
+	<!-- To enable a global second level of caching, 开启全局二级缓存 -->
+	<!-- <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true" /> -->
+
+	<select id="queryReportDataWithId" parameterType="string"
+		resultType="ReportData">
+		select * from report_data where Id=#{id}
+	</select>
+	
+	<select id="queryReportDataWithLike" parameterType="ReportData"
+		resultType="ReportData">
+		select * from report_data
+		<!-- 若最后的内容是“AND”或“OR”开头的，where 元素也知道如何将他们去除 -->
+		<where>
+			<if test="id != null">
+				And Id = #{id}
+			</if>
+			<if test="type != null">
+				And Type = #{type}
+			</if>
+			<if test="version != null">
+				<bind name="fuzzyVersion" value="'%' + _parameter.getVersion() + '%'"/>
+				And Version like #{fuzzyVersion}
+			</if>
+			<if test="name != null">
+				<bind name="fuzzyName" value="'%' + _parameter.getName() + '%'"/>
+				And Name like #{fuzzyName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryReportDataWithIds" resultType="ReportData">
+		select * from report_data where Id in
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			<bind name="convertItem" value="'&quot;'+ item + '&quot;'"/> <!-- xml中>,<,',"都需要转义才能使用 -->
+			${convertItem}
+		</foreach>
+	</select>
+	
+	<select id="queryAccountOwnDevices" parameterType="string" 
+		resultType="ReportData">
+		select rd.* from sf_user_device sud, report_data rd where rd.Id=sud.peer_id and sud.account_id=#{id}
+	</select>
+	
+	<select id="queryReportDataWithPage" parameterType="java.util.Map" 
+		resultType="ReportData">
+		select * from report_data where 1=1
+		<if test="id != null">
+			And Id=#{id}
+		</if>
+		limit #{offset}, #{number}
+	</select>
+	
+	<!-- 在引用resultMap的情况下，无需使用resultType属性 -->
+	<select id="queryAccountAndDevices" parameterType="string" resultMap="AccountDevices">
+		select * from sf_user where account_id=#{id}
+	</select>
+	<resultMap type="SfUser" id="AccountDevices">
+		<id property="id" column="id"/>
+		<result property="accountId" column="account_id"/>
+		<result property="name" column="name"/>
+		<result property="type" column="type"/>
+		<result property="salesRegion" column="sales_region"/>
+		<association property="devices" column="account_id" select="queryDevicesWithAccountId"/>
+		<association property="devicesNumber" column="account_id" select="countDevicesNumber"/>
+		<!-- <collection property="devices" column="account_id" select="queryDevicesWithAccountId"></collection> -->
+	</resultMap>
+	<sql id="queryCondition">
+		where account_id=#{id}
+	</sql>
+	<select id="queryDevicesWithAccountId" parameterType="string"
+		resultType="SfUserDevice">
+		select id,account_id accountId,peer_id deviceId,type from sf_user_device <include refid="queryCondition"></include>
+	</select>
+	<select id="countDevicesNumber" parameterType="string" resultType="int">
+		select count(*) from sf_user_device <include refid="queryCondition"></include>
+	</select>
+	
+	<insert id="createNewSfRecords" parameterType="SfUser">
+		insert into sf_user (account_id, name, type, sales_region) 
+		values (#{accountId}, #{name}, #{type}, #{salesRegion})
+	</insert>
+	
+	<insert id="createMultipleNewSfRecords" parameterType="SfUser">
+		insert into sf_user (account_id, name, type, sales_region) values
+		<!-- 传入的参数是list类型，collection的值是list，是数组则collection的值为array -->
+		<foreach collection="list" item="item" separator=",">
+			(#{item.accountId}, #{item.name}, #{item.type}, #{item.salesRegion})
+		</foreach>
+	</insert>
+	
+	<insert id="createReportDataRecord" parameterType="ReportData">
+		<selectKey resultType="string" order="BEFORE" keyProperty="id">
+			select substr(replace(uuid(),'-',''), 1, 16) <!-- 生成uuid的主键 -->
+		</selectKey>
+		insert into report_data (Id, Type, Version, Name) 
+		values (#{id}, #{type}, #{version}, #{name})
+	</insert>
+	
+	<delete id="deleteReportDataRecord" parameterType="ReportData">
+		delete from report_data
+		<where>
+			<if test="id != null">
+				And Id = #{id}
+			</if>
+			<if test="type != null">
+				And Type = #{type}
+			</if>
+			<if test="name != null">
+				And Name = #{name}
+			</if>
+			<if test="version != null">
+				And Version = #{version}
+			</if>
+		</where>
+	</delete>
+	
+	<update id="updateReportDataRecord" parameterType="ReportData">
+		update report_data
+		<!-- 这里，set 元素会动态前置 SET 关键字，同时也会消除无关的逗号 -->
+		<set>
+			<if test="type != null">Type=#{type},</if>
+			<if test="name != null">Name=#{name},</if>
+			<if test="version != null">Version=#{version}</if>
+		</set>
+		where Id=#{id}
+	</update>
+	
+</mapper>

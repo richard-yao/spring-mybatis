@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<!-- mybatis的这些配置字段有严格的顺序，不正确会导致服务器启动抛出异常 -->
+	<!-- <properties></properties> -->
+	<settings>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+	<typeAliases>
+		<package name="com.richard.java8use.model"/>
+	</typeAliases>
+	<!-- <mappers>
+		<package name="mapper"/>
+	</mappers> -->
+</configuration>
