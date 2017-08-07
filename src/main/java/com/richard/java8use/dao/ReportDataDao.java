@@ -9,10 +9,18 @@ import com.richard.java8use.model.SfUser;
 /**
 * @author RichardYao richardyao@tvunetworks.com
 * @date 2017年7月24日 下午2:23:50
+* 接口可以多继承接口，不能多继承抽象类
 */
-public interface ReportDataDao {
+public interface ReportDataDao extends BaseDao, DataDao {
+	
+	/**
+	 * 在jdk1.8中，接口是可以有static/default方法块的
+	 */
+	default void init() {
+		System.out.println(123);
+	}
 
-	ReportData queryReportDataWithId(String id);
+	ReportData queryReportDataWithId(String id); // 接口中的方法默认都是abstract修饰的
 	
 	List<ReportData> queryReportDataWithLike(ReportData data);
 	
