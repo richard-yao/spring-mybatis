@@ -12,9 +12,12 @@ import java.util.stream.Collectors;
 * @date 2017年6月9日 下午2:21:54
 */
 public class TestUse {
+	
+	static int number = 10;
 
 	public static void main(String[] args) {
 		useParameter();
+		System.out.println("Instance number is " + number);
 		String[] array = {"123","wha's your name","richard","well","sort function","richard"};
 		Arrays.sort(array, (val1, val2) -> (val1.compareTo(val2) >= 0 ? -1 : 1));
 		
@@ -52,7 +55,10 @@ public class TestUse {
 	
 	public static void useParameter() {
 		String para = "oneTwoThree";
-		Runnable runnable = () -> System.out.println(para); // lambda表达式中的para实际上是等效final参数，虽然无需final修饰但是也必须要不可更改
+		Runnable runnable = () -> {
+			number = 20; // 对于实例的字段已经静态变量是可读可写的
+			System.out.println(para); // lambda表达式中的para实际上是等效final参数，虽然无需final修饰但是也必须要不可更改(局部变量)
+		};
 		runnable.run();
 		//para = "name";
 	}

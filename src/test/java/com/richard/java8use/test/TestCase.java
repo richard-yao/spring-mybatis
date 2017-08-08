@@ -13,9 +13,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.richard.java8use.model.ReportData;
 import com.richard.java8use.newfeature.Converter;
 import com.richard.java8use.newfeature.Formula;
 import com.richard.java8use.newfeature.Formula2;
+import com.richard.java8use.newfeature.ReportDataFactory;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCase {
@@ -90,6 +92,13 @@ public class TestCase {
 	public void test7LambdaInnerUse() {
 		HelloLambda helloLambda = new HelloLambda();
 		helloLambda.runnable.run();
+	}
+	
+	@Test
+	public void test8LambdaUseConstructor() {
+		ReportDataFactory<ReportData> factory = ReportData::new; // lambda表达式构造函数引用
+		ReportData record = factory.create("T", "4.2.8", "richard-test");
+		System.out.println(record.getType() + record.getName() + record.getVersion());
 	}
 	
 }

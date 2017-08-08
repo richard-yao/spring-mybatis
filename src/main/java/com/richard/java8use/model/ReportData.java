@@ -14,6 +14,14 @@ public class ReportData {
 	String version;
 	String name;
 	
+	public ReportData(){}
+	
+	public ReportData(String type, String version, String name) {
+		this.type = type;
+		this.version = version;
+		this.name = name;
+	}
+	
 	public String getId() {
 		return id;
 	}
