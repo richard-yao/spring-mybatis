@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class TestUse {
 
 	public static void main(String[] args) {
+		useParameter();
 		String[] array = {"123","wha's your name","richard","well","sort function","richard"};
 		Arrays.sort(array, (val1, val2) -> (val1.compareTo(val2) >= 0 ? -1 : 1));
 		
@@ -47,6 +48,13 @@ public class TestUse {
 	
 	public static void testMapValue(String key, String value) {
 		System.out.println(key + value);
+	}
+	
+	public static void useParameter() {
+		String para = "oneTwoThree";
+		Runnable runnable = () -> System.out.println(para); // lambda表达式中的para实际上是等效final参数，虽然无需final修饰但是也必须要不可更改
+		runnable.run();
+		//para = "name";
 	}
 
 }
