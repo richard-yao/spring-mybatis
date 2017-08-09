@@ -101,6 +101,12 @@ public class TestCase {
 		System.out.println(record.getType() + record.getName() + record.getVersion());
 	}
 	
+	@Test
+	public void test9TestInterviewQuestions() {
+		System.out.println(-1 >>> 2); // 无符号右移
+		System.out.println(2 >> 1);
+		System.out.println(-2 >> 1);
+	}
 }
 
 /**
