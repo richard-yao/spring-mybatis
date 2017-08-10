@@ -18,8 +18,7 @@ import com.richard.java8use.newfeature.Converter;
 import com.richard.java8use.newfeature.Formula;
 import com.richard.java8use.newfeature.Formula2;
 import com.richard.java8use.newfeature.ReportDataFactory;
-
-import io.vidyo.util.GenerateToken;
+import com.richard.java8use.util.GenerateToken;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCase {
