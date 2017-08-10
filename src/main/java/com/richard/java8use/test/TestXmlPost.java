@@ -37,7 +37,6 @@ public class TestXmlPost {
 			httpPost = new HttpPost(reqURL);
 			httpPost.setHeader("Content-Type", type);
 			String encoding = Base64.getEncoder().encodeToString((username + ":" + password).getBytes(Charset.forName("UTF-8")));
-			System.out.println(encoding);
 			httpPost.setHeader("Authorization", "Basic " + encoding);
 			httpPost.setHeader("User-Agent", "VidyoDesktop");
 			httpPost.setHeader("SOAPAction", "logIn");
@@ -84,7 +83,7 @@ public class TestXmlPost {
 		String param = "";
 		String path = "E:\\test.xml";
 		param = loadXmlParam(path);
-		param = param.replaceAll("\\s", "");
+		//param = param.replaceAll("\\s", "");
 		String response = sendSSLPostRequest(url, param, type, username, password);
 		System.out.println(response);
 	}

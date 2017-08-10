@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 * @author RichardYao richardyao@tvunetworks.com
 * @date 2017年6月9日 下午2:21:54
 */
-public class TestUse {
+public class TestUseJdk8Feature {
 	
 	static int number = 10;
 
