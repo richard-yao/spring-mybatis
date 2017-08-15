@@ -113,7 +113,7 @@ public class TestCase {
 	public void test10TestGenerateToken() {
 		String key = "42936e5715ef4ebf8588452ca09f1a6e";
 		String appID = "3c8146.vidyo.io";
-		String userName = "merrayliu";
+		String userName = "richardyao";
 		String expiresInSecs = "10000";
 		String token = GenerateToken.generateProvisionToken(key, userName + "@" + appID, expiresInSecs, "");
 		System.out.println(token);
