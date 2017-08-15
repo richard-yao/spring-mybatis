@@ -11,6 +11,7 @@
        http://www.springframework.org/schema/aop 
        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
+	<!-- 配置spring支持注解驱动 -->
 	<mvc:annotation-driven />
 	<!-- proxy-target-class=true强制使用cglib代理, 为了使自定义切面生效，这个配置只能放在applicationContext-mvc.xml中 -->
 	<aop:aspectj-autoproxy proxy-target-class="true" />
@@ -18,7 +19,8 @@
 	<context:component-scan base-package="com.richard.java8use.controller" />
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<!-- 为了让spring在渲染jsp时支持jstl表达式, 实际并不需要设定, 当前版本中 InternalResourceViewResolver默认已经是JstlView-->
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> 
 		<property name="contentType" value="text/html"/>
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
@@ -50,7 +52,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" /> <!-- 拦截所有controller -->
-			<mvc:exclude-mapping path="/js/**" />
+			<mvc:exclude-mapping path="/js/**" /> <!-- 放开对静态资源的拦截 -->
 			<mvc:exclude-mapping path="/css/**" />
 			<mvc:exclude-mapping path="/images/**" />
 			<bean id="myHandlerInterceptor" class="com.richard.java8use.interceptor.MyHandlerInterceptor" />

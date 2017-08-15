@@ -24,7 +24,8 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/</url-pattern> <!-- 匹配/login以及静态资源，但是对于*.jsp这种后缀型url并不会匹配 -->
+		<!-- <url-pattern>/*</url-pattern> 会匹配所有url:路径型的和后缀型的url(包括/login, *.jsp, *.js和 *.html等) -->
 	</servlet-mapping>
 	<filter>
 		<filter-name>encodingFilter</filter-name>

@@ -122,6 +122,7 @@ public class TestCase {
 
 /**
  * 对于多接口中抽象方法和default方法相同定义的情况，需要重写该方法
+ * 对于两个接口中有相同default方法，定义一个类同时实现这两个接口也需要复写defult方法
  * @author RichardYao
  *
  */

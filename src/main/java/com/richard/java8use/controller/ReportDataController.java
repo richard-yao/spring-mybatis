@@ -27,7 +27,7 @@ public class ReportDataController {
 	@Autowired
 	private ReportDataService reportDataService;
 	
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = {"/index", "/index2"}, method = RequestMethod.GET)
 	public ModelAndView queryRecord(@RequestParam("id") String id) {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
