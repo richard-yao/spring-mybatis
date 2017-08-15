@@ -49,7 +49,7 @@
 	
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/> <!-- 拦截所有controller -->
+			<mvc:mapping path="/**" /> <!-- 拦截所有controller -->
 			<mvc:exclude-mapping path="/js/**" />
 			<mvc:exclude-mapping path="/css/**" />
 			<mvc:exclude-mapping path="/images/**" />
