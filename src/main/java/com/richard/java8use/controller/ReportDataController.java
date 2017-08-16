@@ -7,11 +7,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.richard.java8use.model.ReportData;
 import com.richard.java8use.model.SfUser;
@@ -27,12 +31,83 @@ public class ReportDataController {
 	@Autowired
 	private ReportDataService reportDataService;
 	
-	@RequestMapping(value = {"/index", "/index2"}, method = RequestMethod.GET)
+	/**
+	 * 对于RequestMapping的路径映射配置, paht/value是等价的, 从语义上来说当然path更容易理解
+	 * @return
+	 */
+	@RequestMapping(path = {"/index", "/index2"}, method = RequestMethod.GET)
 	public ModelAndView queryRecord(@RequestParam("id") String id) {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
 		result.addObject("record", temp);
 		return result;
+	}
+	
+	/**
+	 * 使用RequestParam注解可以将输入的数组参数自动绑定
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(path = "/index/postArray", method = RequestMethod.GET)
+	public @ResponseBody List<String> useRequestParam(@RequestParam(name = "id", required = true) List<String> ids) {
+		return ids;
+	}
+	
+	/**
+	 * 前端使用ajax传递的json数据集，可以使用RequestBody注解来转换
+	 * @param parameters
+	 * @return
+	 */
+	@RequestMapping(path = "/index/postCollection", method = RequestMethod.POST)
+	public @ResponseBody List<Map<String, String>> useRequestBody(@RequestBody List<Map<String, String>> parameters) {
+		return parameters;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(path = "/index/redirectAddress", method = RequestMethod.GET)
+	public @ResponseBody List<Map<String, String>> testRedirect(Model model) {
+		List<Map<String, String>> result = (List<Map<String, String>>) model.asMap().get("parameters");
+		if(model.containsAttribute("map")) {
+			result.add((Map<String, String>) model.asMap().get("map"));
+		}
+		return result;
+	}
+	
+	/**
+	 * 使用redirect跳转到指定action的同时，使用addFlashAttribute来保证跳转过程中的参数不会丢失
+	 * redirect请求类型是GET请求, 整个过程: POST-redirect-GET
+	 * @param parameters
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(path = "/index/useRedirect", method = RequestMethod.POST)
+	public String useRedirect(@RequestBody List<Map<String, String>> parameters, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("parameters", parameters);
+		return "redirect:redirectAddress"; // 跳转路径是同级路径下的redirectAddress，或者使用/index/redirectAddress，等效
+	}
+	
+	/**
+	 * ModelAttribute注解方法会在其他action调用之前被调用,
+	 * 并且如果有返回结果，则会把结果保存在action的model对象中,
+	 * 多个ModelAttribute注解方法的执行顺序是无序的
+	 * @return
+	 */
+	@ModelAttribute
+	public Map<String, String> useModelAttribute() {
+		//System.out.println("Action execute of method attribute0");
+		Map<String, String> version = new HashMap<String, String>();
+		version.put("version", "1.0.0");
+		return version;
+	}
+	
+	@ModelAttribute
+	public void useModelAttribute1() {
+		//System.out.println("Action execute of method attribute1");
+	}
+	
+	@ModelAttribute
+	public void useModelAttribute2() {
+		//System.out.println("Action execute of method attribute2");
 	}
 	
 	@RequestMapping(value = "/report-data/query", method = RequestMethod.GET)
