@@ -33,6 +33,15 @@ public class ReportDataController {
 	@Autowired
 	private ReportDataService reportDataService;
 	
+	/**
+	 * 没有指定RequestMapping则默认访问路径为根目录
+	 */
+	@RequestMapping
+	public String index(Model model) {
+		model.addAttribute("message", "Welcom to my web site!");
+		return "index";
+	}
+	
 	@RequestMapping(path = "/index/download/excel")
 	@ResponseBody
 	public String downloadExcel(HttpServletResponse response) { // 生成excel，pdf文件也可以通过自定义视图
