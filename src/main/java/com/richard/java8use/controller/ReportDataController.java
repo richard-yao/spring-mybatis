@@ -35,7 +35,7 @@ public class ReportDataController {
 	 * 对于RequestMapping的路径映射配置, paht/value是等价的, 从语义上来说当然path更容易理解
 	 * @return
 	 */
-	@RequestMapping(path = {"/index", "/index2"}, method = RequestMethod.GET)
+	@RequestMapping(path = {"/index", "/index/2"}, method = RequestMethod.GET)
 	public ModelAndView queryRecord(@RequestParam("id") String id) {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
