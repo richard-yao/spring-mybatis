@@ -18,12 +18,53 @@
 
 	<context:component-scan base-package="com.richard.java8use.controller" />
 
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- Spring支持视图解析器的链式配置,order值越大,解析器执行越晚 -->
+	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 为了让spring在渲染jsp时支持jstl表达式, 实际并不需要设定, 当前版本中 InternalResourceViewResolver默认已经是JstlView-->
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/> 
-		<property name="contentType" value="text/html"/>
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="contentType" value="text/html; charset=utf-8"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+		<property name="order" value="2"/>
+	</bean>
+
+	<!-- FreeMarker -->
+	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+		<property name="contentType" value="text/html; charset=utf-8"/>
+		<property name="cache" value="true"/>
+		<property name="suffix" value=".ftl"/>
+		<property name="order" value="1"/>
+	</bean>
+	
+	<!-- 配置FreeMarker细节 -->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- 模板路径 -->
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+		<property name="freemarkerSettings">
+			<props>
+				<!-- 刷新模板的周期，单位为秒 -->
+				<prop key="template_update_delay">5</prop>
+				<!--模板的编码格式 -->
+				<prop key="defaultEncoding">UTF-8</prop>
+				<!--url编码格式 -->
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<!--此属性可以防止模板解析空值时的错误 -->
+				<prop key="classic_compatible">true</prop>
+				<!--该模板所使用的国际化语言环境选项-->
+				<prop key="locale">zh_CN</prop>
+				<!--布尔值格式-->
+				<prop key="boolean_format">true,false</prop>
+				<!--日期时间格式-->
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<!--时间格式-->
+				<prop key="time_format">HH:mm:ss</prop>
+				<!--数字格式-->
+				<prop key="number_format">0.######</prop>
+				<!--自动开启/关闭空白移除，默认为true-->
+				<prop key="whitespace_stripping">true</prop>
+			</props>
+		</property>
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,26 @@ public class ReportDataController {
 	@Autowired
 	private ReportDataService reportDataService;
 	
+	@RequestMapping(path = "/index/download/excel")
+	@ResponseBody
+	public String downloadExcel(HttpServletResponse response) { // 生成excel，pdf文件也可以通过自定义视图
+		// 通过指定http请求head来生成excel文件, 不过这种生成内容格式完全不对; 但是作为例子说明excel文件其实也只是response返回的数据流
+		response.setHeader("Content-type","application/octet-stream");
+		response.setHeader("Content-Disposition","attachment; filename=table.xls");
+		return "<table><tr><td>Hello</td><td>Excel</td></tr></table>";
+	}
+	
+	/**
+	 * 在没有指定View或者ResponseBody注解情况下，访问url内容对应的就是相应目录位置下.jsp内容
+	 * @return
+	 */
+	@RequestMapping(path = "/helloworld")
+	public Map<String, String> helloWordl() {
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("message", "Hello everybody!"); // 对于基本数据类型，如果想要作为返回结果，则必须添加ResponseBody注解，否则会抛出异常
+		return result;
+	}
+	
 	/**
 	 * 对于RequestMapping的路径映射配置, paht/value是等价的, 从语义上来说当然path更容易理解
 	 * @return
@@ -42,6 +64,22 @@ public class ReportDataController {
 		result.addObject("record", temp);
 		result.addObject("message", "<h2>Hello ModelAndView</h2>");
 		return result;
+	}
+	
+	/**
+	 * 在使用RequestBody注解时，前端必须显式指定Content-Type是application/json,不然会抛出415异常，不能使用表单提交
+	 * @return
+	 */
+	@RequestMapping(path = {"/index"}, method = RequestMethod.POST)
+	public @ResponseBody Map<String, String> changeRecord(@RequestBody ReportData reportData) {
+		Map<String, String> error = new HashMap<String, String>();
+		if(reportData != null) {
+			boolean result = reportDataService.updateReportDataRecord(reportData);
+			error.put("result", String.valueOf(result));
+		} else {
+			error.put("result", String.valueOf(false));
+		}
+		return error;
 	}
 	
 	/**
@@ -230,5 +268,12 @@ public class ReportDataController {
 		Map<String, Object> tempResult = new HashMap<String, Object>();
 		tempResult.put("result", result);
 		return tempResult;
+	}
+	
+	@RequestMapping("/fm/ftl")
+	public String ftl(Model model) {
+		model.addAttribute("users", new String[]{"tom","mark","jack"});
+		model.addAttribute("message", "Hello FreeMarker View!");
+		return "demo";
 	}
 }
