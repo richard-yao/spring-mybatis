@@ -40,6 +40,7 @@ public class ReportDataController {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
 		result.addObject("record", temp);
+		result.addObject("message", "<h2>Hello ModelAndView</h2>");
 		return result;
 	}
 	
