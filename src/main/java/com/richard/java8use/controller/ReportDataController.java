@@ -1,10 +1,12 @@
 package com.richard.java8use.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -293,5 +296,22 @@ public class ReportDataController {
 		// ftl中变量名只能是字母,数字,下划线,$,@和#的组合,且不能以数字开头
 		model.addAttribute("reportdata", complexResult);
 		return "demo";
+	}
+	
+	@RequestMapping(path = "/fileSave", method = RequestMethod.POST)
+	public String fileSave(Model model, MultipartFile[] files, HttpServletRequest request) throws Exception {
+		String path = request.getServletContext().getRealPath("/images");
+		StringBuilder msg = new StringBuilder();
+		for(MultipartFile file : files) {
+			System.out.println(file.getOriginalFilename());
+			System.out.println(file.getSize());
+			System.out.println("---------------------");
+			File tempFile = new File(path, file.getOriginalFilename());
+			file.transferTo(tempFile);
+			msg.append("<img src='images/").append(file.getOriginalFilename()).append("' width='200' />");
+		}
+		model.addAttribute("images", msg);
+		System.out.println(path);
+		return "index";
 	}
 }
