@@ -283,6 +283,15 @@ public class ReportDataController {
 	public String ftl(Model model) {
 		model.addAttribute("users", new String[]{"tom","mark","jack"});
 		model.addAttribute("message", "Hello FreeMarker View!");
+		Map<String, Object> complexResult = new HashMap<String, Object>();
+		ReportData data = new ReportData();
+		data.setName("tvu");
+		List<ReportData> records = reportDataService.queryReportDataWithLike(data);
+		if(records != null) {
+			complexResult.put("report", records);
+		}
+		// ftl中变量名只能是字母,数字,下划线,$,@和#的组合,且不能以数字开头
+		model.addAttribute("reportdata", complexResult);
 		return "demo";
 	}
 }
