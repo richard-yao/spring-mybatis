@@ -13,6 +13,7 @@
 		<package name="com.richard.java8use.model"/>
 	</typeAliases>
 	<!-- <mappers>
+		使用package设定，mapper.xml文件位置必须在对应class的一个位置同时配置maven打包时加入xml文件，不然会出错
 		<package name="mapper"/>
 	</mappers> -->
 </configuration>
