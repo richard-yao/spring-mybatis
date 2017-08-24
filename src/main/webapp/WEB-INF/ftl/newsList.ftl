@@ -22,7 +22,7 @@ li {
 <body>
 	<div id="container">
 		<h2>新闻焦点</h2>
-		<#setting number_format="#">
+		<#setting number_format="#"> <#-- 设定页面相关参数，可选locale， number_format等 -->
 		<ul>
 			<#list articles as article>
 				<li>
