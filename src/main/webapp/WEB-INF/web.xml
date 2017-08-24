@@ -52,14 +52,14 @@
 		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>news</servlet-name>
 		<servlet-class>com.richard.java8use.servlet.NewsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>news</servlet-name>
 		<url-pattern>/news</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 	
 	<error-page>
 		<error-code>404</error-code>

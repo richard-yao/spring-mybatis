@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import freemarker.template.TemplateException;
 * @author RichardYao richardyao@tvunetworks.com
 * @date 2017年8月24日 上午11:23:06
 */
+@WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
 	/**
