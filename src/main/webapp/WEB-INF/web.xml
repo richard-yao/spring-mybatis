@@ -47,12 +47,26 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.jpg</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>news</servlet-name>
+		<servlet-class>com.richard.java8use.servlet.NewsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>news</servlet-name>
+		<url-pattern>/news</url-pattern>
+	</servlet-mapping>
+	
 	<error-page>
 		<error-code>404</error-code>
-		<location>/404.html</location>
+		<location>/html/404.html</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/500.html</location>
+		<location>/html/500.html</location>
 	</error-page>
 </web-app>
