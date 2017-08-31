@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -117,6 +118,55 @@ public class TestCase {
 		String expiresInSecs = "10000";
 		String token = GenerateToken.generateProvisionToken(key, userName + "@" + appID, expiresInSecs, "");
 		System.out.println(token);
+	}
+	
+	@Test
+	public void test11UseShort() {
+		short s1 = 1;
+		s1 = (short) (s1 + 1); // short是16位二进制数据，1是int类型，32位，因此基础运算需要加上类型强制转换
+		short s2 = 1;
+		s2 += 1; // += 操作隐含了强制类型转换
+		Assert.assertTrue(s1 == s2);
+	}
+	
+	@Test
+	public void test12UseIntern() {
+		String s2 = new StringBuilder("ja").append("va").toString();
+		Assert.assertFalse(s2.intern() == s2); // java这个字符串，在程序启动时jvm中就有实现了导致intern取到的是默认常量池中的字符而不是自己生成的这个
+		String s1 = new StringBuilder("go").append("od").toString();
+		Assert.assertTrue(s1.intern() == s1);
+	}
+	
+	@Test
+	public void test13EndLoop() {
+		int number = 0;
+		for(int i = 0; i < 10; i++) {
+			for(int j = 1; j < 5; j++) {
+				if(j % 3 == 0 && number == 0) {
+					number = j;
+					//return; // return直接结束方法 , 不再执行
+					break; // break只能跳出一层循环
+				}
+			}
+			number++;
+		}
+		System.out.println("Number is " + number);
+		Assert.assertEquals(13, number);
+	}
+	
+	@Test
+	public void test14Equal() {
+		String s1 = "Programming";
+		String s2 = new String("Programming");
+		String s3 = "Program";
+		String s4 = "ming";
+		String s5 = "Program" + "ming";
+		String s6 = s3 + s4;
+		Assert.assertFalse(s1 == s2);
+		Assert.assertTrue(s1 == s5);
+		Assert.assertFalse(s1 == s6);
+		Assert.assertTrue(s1 == s6.intern());
+		Assert.assertFalse(s2 == s2.intern());
 	}
 }
 
