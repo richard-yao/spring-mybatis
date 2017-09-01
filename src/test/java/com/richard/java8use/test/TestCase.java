@@ -20,6 +20,7 @@ import com.richard.java8use.newfeature.Formula;
 import com.richard.java8use.newfeature.Formula2;
 import com.richard.java8use.newfeature.ReportDataFactory;
 import com.richard.java8use.util.GenerateToken;
+import com.richard.java8use.util.GenerateToken.Person;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCase {
@@ -118,6 +119,17 @@ public class TestCase {
 		String expiresInSecs = "10000";
 		String token = GenerateToken.generateProvisionToken(key, userName + "@" + appID, expiresInSecs, "");
 		System.out.println(token);
+		// 静态代码块测试
+		token = GenerateToken.generateProvisionToken(key, userName + "@" + appID, expiresInSecs, "");
+		System.out.println(token);
+		GenerateToken token2 = new GenerateToken();
+		System.out.println(token2.getClass().getName());
+		// 静态内部类测试
+		Person person = new Person("RichardYao");
+		System.out.println(person.getName());
+		// 非静态内部类的使用，必须借用外部类的实例来实例化内部类
+		GenerateToken.Card card = token2.new Card(3);
+		System.out.println("Get card number: " + card.getNumber());
 	}
 	
 	@Test

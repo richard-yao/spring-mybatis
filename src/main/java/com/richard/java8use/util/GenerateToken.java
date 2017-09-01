@@ -26,4 +26,54 @@ public class GenerateToken {
 		expiresLong = Long.parseLong(expires);
 		return "" + (EPOCH_SECONDS + currentUnixTimestamp + expiresLong);
 	}
+	
+	/**
+	 * 静态代码块中的方法在类初始化时被调用一次;
+	 * 未实例化而在静态方法被调用时也会执行一次（只有一次);
+	 * 实例化子类时会先调用父类的静态代码块,再执行子类的静态代码块
+	 */
+	static {
+		System.out.println("initialize GenerateToken class");
+	}
+	
+	/**
+	 * 静态内部类的使用和普通的类一样，可以实例化而不受外部类限制
+	 * 并且不会像静态方法块或者静态成员那样直接初始化，需要new单独实例化
+	 * @author RichardYao
+	 */
+	public static class Person {
+		
+		private String name;
+		
+		public Person() {
+			System.out.println("Start initialize static class of Person");
+		}
+		
+		public Person(String name) {
+			this();
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+	}
+	
+	public class Card {
+		
+		private int number;
+		
+		public Card() {
+			System.out.println("Start initialize static class of Card");
+		}
+		
+		public Card(int number) {
+			this();
+			this.number = number;
+		}
+		
+		public int getNumber() {
+			return this.number;
+		}
+	}
 }
