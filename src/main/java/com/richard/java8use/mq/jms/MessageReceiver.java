@@ -28,8 +28,12 @@ public class MessageReceiver extends MessageCommon {
 		super(broker, destination);
 	}
 	
+	/**
+	 * This message destination is a queue, so only one consumer will receive the message and return ack though exist multiple available consumers
+	 * @throws Exception
+	 */
 	public void receiveMessage() throws Exception {
-		if(checkConnection()) {
+		if(checkConnection() && consumer != null) {
 			while(true) {
 				Message message = consumer.receive(1000); // timeout interval, unit is ms
 				TextMessage text = (TextMessage) message;

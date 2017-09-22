@@ -29,7 +29,7 @@ public class MessageSender extends MessageCommon {
 	}
 	
 	public void sendMessage(String message) throws Exception {
-		if(checkConnection()) {
+		if(checkConnection() && producer != null) {
 			TextMessage msg = session.createTextMessage(message);
 			producer.send(msg);
 			logger.info("Send message: " + message);

@@ -1,26 +1,27 @@
-package com.richard.java8use.mq.jms;
+package com.richard.java8use.mq.topic;
 
 import javax.jms.Connection;
 import javax.jms.Session;
+import javax.jms.TopicConnection;
+import javax.jms.TopicSession;
 
 import com.richard.java8use.mq.MessageBroker;
 
 /**
 * @author RichardYao richardyao@tvunetworks.com
-* @date 2017年9月22日 下午2:44:18
+* @date 2017年9月22日 下午4:27:36
 */
-public abstract class MessageCommon extends MessageBroker {
+public abstract class TopicMessageCommon extends MessageBroker {
+
+	TopicConnection connection = null;
+	TopicSession session = null;
+
+	public TopicMessageCommon() {}
 	
-	// Connection related parameters
-	Connection connection = null;
-	Session session = null;
-	
-	public MessageCommon() {}
-	
-	public MessageCommon(String broker, String destination) {
+	public TopicMessageCommon(String broker, String destination) {
 		super(broker, destination);
 	}
-	
+
 	@Override
 	public Connection getConnection() {
 		if(connection == null) {
@@ -36,4 +37,5 @@ public abstract class MessageCommon extends MessageBroker {
 		}
 		return session;
 	}
+
 }
