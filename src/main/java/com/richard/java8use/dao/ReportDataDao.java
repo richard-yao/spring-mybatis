@@ -22,6 +22,8 @@ public interface ReportDataDao extends BaseDao, DataDao {
 
 	ReportData queryReportDataWithId(String id); // 接口中的方法默认都是abstract修饰的
 	
+	List<Map<String, String>> queryReportDataWithName(String name); // 即便mybatis的动态sql很强大，但是对于返回多条map记录的结果也必须指定结果是list，否则会抛出异常
+	
 	List<ReportData> queryReportDataWithLike(ReportData data);
 	
 	List<ReportData> queryReportDataWithIds(String[] ids);

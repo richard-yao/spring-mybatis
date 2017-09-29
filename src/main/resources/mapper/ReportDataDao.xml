@@ -13,6 +13,11 @@
 		select * from report_data where Id=#{id}
 	</select>
 	
+	<select id="queryReportDataWithName" parameterType="string"
+		resultType="hashmap">
+		select * from report_data where name=#{name}
+	</select>
+	
 	<select id="queryReportDataWithLike" parameterType="ReportData"
 		resultType="ReportData">
 		select * from report_data
@@ -71,11 +76,11 @@
 		<association property="devicesNumber" column="account_id" select="countDevicesNumber"/>
 		<!-- <collection property="devices" column="account_id" select="queryDevicesWithAccountId"></collection> -->
 	</resultMap>
+	<!-- for include use with id: queryCondition -->
 	<sql id="queryCondition">
 		where account_id=#{id}
 	</sql>
-	<select id="queryDevicesWithAccountId" parameterType="string"
-		resultType="SfUserDevice">
+	<select id="queryDevicesWithAccountId" parameterType="string" resultType="SfUserDevice">
 		select id,account_id accountId,peer_id deviceId,type from sf_user_device <include refid="queryCondition"></include>
 	</select>
 	<select id="countDevicesNumber" parameterType="string" resultType="int">

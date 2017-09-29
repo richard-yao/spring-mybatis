@@ -36,6 +36,10 @@ public class ReportDataService {
 		return reportData.queryReportDataWithId(id);
 	}
 	
+	public List<Map<String, String>> queryRecordWithName(String name) {
+		return reportData.queryReportDataWithName(name);
+	}
+	
 	public List<ReportData> queryReportDataWithLike(ReportData data) {
 		return reportData.queryReportDataWithLike(data);
 	}

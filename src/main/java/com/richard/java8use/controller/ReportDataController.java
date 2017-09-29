@@ -90,6 +90,18 @@ public class ReportDataController {
 		return result;
 	}
 	
+	@RequestMapping(path = {"/report-data/query-name"}, method = RequestMethod.GET)
+	public @ResponseBody List<Map<String, String>> queryRecordWithName(@RequestParam("name") String name) {
+		List<Map<String, String>> result = null;
+		if(name != null) {
+			result = reportDataService.queryRecordWithName(name);
+		}
+		if(result == null) {
+			result = new ArrayList<Map<String, String>>();
+		}
+		return result;
+	}
+	
 	/**
 	 * 在使用RequestBody注解时，前端必须显式指定Content-Type是application/json,不然会抛出415异常，不能使用表单提交
 	 * @return
