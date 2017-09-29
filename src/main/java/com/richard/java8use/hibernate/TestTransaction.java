@@ -1,10 +1,15 @@
 package com.richard.java8use.hibernate;
 
-import org.apache.log4j.Logger;
+import java.util.Arrays;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.richard.java8use.model.Account;
 
@@ -14,7 +19,7 @@ import com.richard.java8use.model.Account;
 */
 public class TestTransaction {
 	
-	private Logger logger = Logger.getLogger(TestTransaction.class);
+	private Logger logger = LoggerFactory.getLogger(TestTransaction.class);
 	
 	private Configuration config = null;
 	private SessionFactory factory = null;
@@ -23,23 +28,47 @@ public class TestTransaction {
 	
 	public static void main(String[] args) {
 		TestTransaction test = new TestTransaction();
-		test.addAccount(20000);
+		test.openSession();
+		test.addAccount(2000);
+		List<Integer> params = Arrays.asList(new Integer[]{1,2,3,4,5,6,7,8,9,10});
+		test.queryListAccount(params);
+		test.queryListAccount(params); // The query.list() do not use first-level cache
+		test.queryAccount(9); // use first-level cache
+		test.transactionCommit();
+		test.closeSession();
+	}
+	
+	public void queryListAccount(List<Integer> ids) {
+		String hql = "select a from Account a where a.id in (:ids) ";
+		if(session != null && ids != null) {
+			Query<Account> query = session.createQuery(hql, Account.class);
+			query.setParameterList("ids", ids);
+			List<Account> resultList = query.list();
+			if(resultList != null && resultList.size() > 0) {
+				resultList.forEach(temp -> System.out.println(temp.toString()));
+			}
+		}
 	}
 
 	public void addAccount(int value) {
 		Account account = new Account();
+		account.setId(10);
 		account.setValue(value);
-		openSession();
 		if(session != null) {
 			try {
-				session.saveOrUpdate(account);
-				tx.commit();
+				session.saveOrUpdate(account); // exist id=10 record, update
+				Account record = session.get(Account.class, 10); // used hibernate first-level cache
+				logger.info("Query record: " + record.toString());
 			} catch (Exception e) {
-				logger.error(e, e);
+				logger.error("Exception", e);
 				tx.rollback();
 			}
 		}
-		closeSession();
+	}
+	
+	public void queryAccount(int id) {
+		Account record = session.get(Account.class, id); // used hibernate first-level cache
+		logger.info("Query record: " + record.toString());
 	}
 	
 	public void openSession() {
@@ -56,6 +85,12 @@ public class TestTransaction {
 		if(session == null) {
 			session = factory.openSession();
 			tx = session.beginTransaction();
+		}
+	}
+	
+	public void transactionCommit() {
+		if(tx != null) {
+			tx.commit();
 		}
 	}
 	

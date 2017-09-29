@@ -11,13 +11,23 @@ public class Account {
 	public int getId() {
 		return id;
 	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 	public int getValue() {
 		return value;
 	}
+	
 	public void setValue(int value) {
 		this.value = value;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		result.append("id is ").append(id).append(", value is ").append(value);
+		return result.toString();
 	}
 }
