@@ -75,6 +75,8 @@ public class ReportDataController {
 		ReportData temp = reportDataService.queryRecord(id);
 		if(temp != null) {
 			temp = reportDataService.queryRecord(id); // This query will use SpringCache and do not execute sql again
+		} else {
+			temp = new ReportData();
 		}
 		result.addObject("record", temp);
 		result.addObject("message", "<h2>Hello ModelAndView</h2>");
@@ -204,6 +206,16 @@ public class ReportDataController {
 		boolean result = reportDataService.updateReportDataRecord(data);
 		Map<String, Object> tempResult = new HashMap<String, Object>();
 		tempResult.put("result", result);
+		return tempResult;
+	}
+	
+	@RequestMapping(value = "/report-data/merge", method = RequestMethod.POST)
+	public @ResponseBody Map<String, Object> mergeRecord(@RequestBody ReportData reportData) {
+		Map<String, Object> tempResult = new HashMap<String, Object>();
+		if(reportData != null) {
+			ReportData record = reportDataService.mergeReportDataRecord(reportData);
+			tempResult.put("result", record);
+		}
 		return tempResult;
 	}
 	

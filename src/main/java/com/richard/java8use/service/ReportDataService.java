@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,8 @@ public class ReportDataService {
 	@Autowired
 	ReportDataDao reportData;
 	
-	@Cacheable(value = "accountCache", key = "targetClass + '.' + #id")
+	// Cacheable注解，如果在cache中找到则不再执行方法
+	@Cacheable(value = "accountCache", key = "targetClass + '.' + #id", condition = "#id.length() == 16")
 	public ReportData queryRecord(String id) {
 		return reportData.queryReportDataWithId(id);
 	}
@@ -37,6 +39,7 @@ public class ReportDataService {
 		return reportData.queryReportDataWithIds(ids);
 	}
 	
+	@CacheEvict(value = "accountCache", key = "targetClass + '.' + #record.id")
 	public boolean createReportDataRecord(ReportData record) {
 		int number = reportData.createReportDataRecord(record);
 		if(number > 0) {
@@ -56,6 +59,24 @@ public class ReportDataService {
 		}
 	}
 	
+	// 将方法执行结果作为value存入accountCache中，每次都会执行方法部分
+	@CachePut(value = "accountCache", key = "targetClass + '.' + #data.id")
+	public ReportData mergeReportDataRecord(ReportData data) {
+		int number = reportData.updateReportDataRecord(data);
+		if(number > 0) {
+			return data;
+		} else {
+			number = reportData.createReportDataRecord(data);
+			if(number > 0) {
+				return data;
+			} else {
+				return null;
+			}
+		}
+	}
+	
+	// 清理accountCache中的所有缓存对象
+	@CacheEvict(value = "accountCache", allEntries = true)
 	public boolean deleteReportDataRecord(ReportData data) {
 		int number = reportData.deleteReportDataRecord(data);
 		if(number > 0) {

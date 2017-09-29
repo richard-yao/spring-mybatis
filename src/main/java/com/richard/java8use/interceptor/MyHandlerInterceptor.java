@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +20,8 @@ import com.richard.java8use.service.ReportDataService;
 */
 public class MyHandlerInterceptor implements HandlerInterceptor {
 
+	private Logger logger = LoggerFactory.getLogger(MyHandlerInterceptor.class);
+	
 	@Autowired
 	ReportDataService reportDataService;
 	
@@ -43,7 +47,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
 			Long time = (Long) request.getAttribute("requestTime");
 			Long now = System.currentTimeMillis();
 			Long executeTime = now - time;
-			System.out.println("The request uri: " + request.getRequestURI() + ", cost time: " + executeTime + "ms");
+			logger.info("The request uri: {}, cost time: {} ms", request.getRequestURI(), executeTime);
 		}
 		if(modelAndView != null) { // 对于返回结果是ModelAndView的接口，这里可以对ModelAndView进行操作
 			Map<String, Object> model = modelAndView.getModel();
@@ -53,7 +57,9 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
 					ReportData result = (ReportData) model.get(viewName);
 					String id = result.getId();
 					ReportData data = reportDataService.queryRecord(id); // 在interceptor中注入bean是可以的
-					System.out.println(data.getId());
+					if(data != null) {
+						logger.info("Query's record id is {}", data.getId());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
