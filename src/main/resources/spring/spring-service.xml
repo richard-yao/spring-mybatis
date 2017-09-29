@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee" 
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p" 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
 	http://www.springframework.org/schema/tx 
@@ -12,14 +13,31 @@
 	http://www.springframework.org/schema/context 
 	http://www.springframework.org/schema/context/spring-context-4.3.xsd 
 	http://www.springframework.org/schema/aop 
-	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd 
+	http://www.springframework.org/schema/cache 
+	http://www.springframework.org/schema/cache/spring-cache-4.3.xsd">
 
 	<context:component-scan base-package="com.richard.java8use.service" />
 
+	<!-- 全局注解支持 -->
 	<context:annotation-config />
-
+	<!-- 开启缓存支持 -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- 指定配置文件位置 -->
 	<context:property-placeholder location="classpath:/config.properties" />
+	
+	<!-- 配置Spring cache实现 -->
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="default" />
+				<!-- 自定义account cache -->
+				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="accountCache" />
+			</set>
+		</property>
+	</bean>
 
+	<!-- 配置启用数据库连接池，Druid实现 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
 		<property name="url" value="${dataSource_url}" />

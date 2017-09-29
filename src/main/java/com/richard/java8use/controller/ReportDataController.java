@@ -73,6 +73,9 @@ public class ReportDataController {
 	public ModelAndView queryRecord(@RequestParam("id") String id) {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
+		if(temp != null) {
+			temp = reportDataService.queryRecord(id); // This query will use SpringCache and do not execute sql again
+		}
 		result.addObject("record", temp);
 		result.addObject("message", "<h2>Hello ModelAndView</h2>");
 		return result;

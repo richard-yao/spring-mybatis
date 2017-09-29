@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.richard.java8use.dao.ReportDataDao;
@@ -22,6 +24,7 @@ public class ReportDataService {
 	@Autowired
 	ReportDataDao reportData;
 	
+	@Cacheable(value = "accountCache", key = "targetClass + '.' + #id")
 	public ReportData queryRecord(String id) {
 		return reportData.queryReportDataWithId(id);
 	}
@@ -43,6 +46,7 @@ public class ReportDataService {
 		}
 	}
 	
+	@CacheEvict(value = "accountCache", key = "targetClass + '.' + #data.id")
 	public boolean updateReportDataRecord(ReportData data) {
 		int number = reportData.updateReportDataRecord(data);
 		if(number > 0) {
