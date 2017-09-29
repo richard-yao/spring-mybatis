@@ -1,8 +1,12 @@
 package com.richard.java8use.model;
+
+import org.apache.ibatis.type.Alias;
+
 /**
 * @author RichardYao richardyao@tvunetworks.com
 * @date 2017年9月28日 下午3:25:57
 */
+@Alias("Account")
 public class Account {
 	
 	private int id;

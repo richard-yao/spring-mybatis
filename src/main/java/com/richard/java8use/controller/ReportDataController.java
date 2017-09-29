@@ -24,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.richard.java8use.model.Account;
 import com.richard.java8use.model.ReportData;
 import com.richard.java8use.model.SfUser;
+import com.richard.java8use.service.DataService;
 import com.richard.java8use.service.ReportDataService;
 
 /**
@@ -39,6 +41,8 @@ public class ReportDataController {
 	
 	@Autowired
 	private ReportDataService reportDataService;
+	@Autowired
+	private DataService dataService;
 	
 	/**
 	 * 没有指定RequestMapping则默认访问路径为根目录
@@ -347,5 +351,15 @@ public class ReportDataController {
 		model.addAttribute("images", msg);
 		System.out.println(path);
 		return "index";
+	}
+	
+	@RequestMapping(path = "/account/insert", method = RequestMethod.GET)
+	public @ResponseBody Map<String, String> insertAccountRecord(@RequestParam(name = "value", required = true)int value) {
+		Account account = new Account();
+		account.setValue(value);
+		boolean result = dataService.insertAccountRecord(account);
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("result", String.valueOf(result));
+		return response;
 	}
 }
