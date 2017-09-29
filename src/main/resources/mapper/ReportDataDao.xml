@@ -81,10 +81,12 @@
 		where account_id=#{id}
 	</sql>
 	<select id="queryDevicesWithAccountId" parameterType="string" resultType="SfUserDevice">
-		select id,account_id accountId,peer_id deviceId,type from sf_user_device <include refid="queryCondition"></include>
+		select id,account_id accountId,peer_id deviceId,type from sf_user_device 
+		<include refid="queryCondition"></include>
 	</select>
 	<select id="countDevicesNumber" parameterType="string" resultType="int">
-		select count(*) from sf_user_device <include refid="queryCondition"></include>
+		select count(*) from sf_user_device 
+		<include refid="queryCondition"></include>
 	</select>
 	
 	<insert id="createNewSfRecords" parameterType="SfUser">
