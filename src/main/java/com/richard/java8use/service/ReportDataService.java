@@ -25,7 +25,12 @@ public class ReportDataService {
 	@Autowired
 	ReportDataDao reportData;
 	
-	// Cacheable注解，如果在cache中找到则不再执行方法
+	public ReportData repeatQueryRecord(String id) {
+		// 由于Cacheable实现基于Spring AOP，对于方法内部调用queryRecord(xx)方法，AOP代理无法生效，spring cache自然也没法使用到了
+		return queryRecord(id);
+	}
+	
+	// Cacheable注解，如果在cache中命中则不再执行方法内容； 
 	@Cacheable(value = "accountCache", key = "targetClass + '.' + #id", condition = "#id.length() == 16")
 	public ReportData queryRecord(String id) {
 		return reportData.queryReportDataWithId(id);
@@ -75,8 +80,8 @@ public class ReportDataService {
 		}
 	}
 	
-	// 清理accountCache中的所有缓存对象
-	@CacheEvict(value = "accountCache", allEntries = true)
+	// 清理accountCache中的所有缓存对象;beforeInvocation表示在方法执行前清空缓存，因为CacheEvict会因注解方法抛出异常而终止执行
+	@CacheEvict(value = "accountCache", allEntries = true, beforeInvocation = true)
 	public boolean deleteReportDataRecord(ReportData data) {
 		int number = reportData.deleteReportDataRecord(data);
 		if(number > 0) {

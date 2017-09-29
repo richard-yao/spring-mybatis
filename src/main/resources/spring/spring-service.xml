@@ -27,11 +27,23 @@
 	<context:property-placeholder location="classpath:/config.properties" />
 	
 	<!-- 配置Spring cache实现 -->
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+	<bean id="cacheManager" class="org.springframework.cache.support.CompositeCacheManager">
+		<property name="cacheManagers">
+			<list>
+				<ref bean="simpleCacheManager"/>
+				<!-- 这里可以配置多个cache管理器或者自定义的cache实现 -->
+				<!-- <ref bean="guavaCacheManager"/> -->
+			</list>
+		</property>
+		<!-- 缓存都不可用时，不做操作，直接执行注解方法 -->
+		<property name="fallbackToNoOpCache" value="true"/>
+	</bean>
+	
+	<bean id="simpleCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 		<property name="caches">
 			<set>
 				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="default" />
-				<!-- 自定义account cache -->
+				<!-- 自定义缓存命名accountCache -->
 				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="accountCache" />
 			</set>
 		</property>

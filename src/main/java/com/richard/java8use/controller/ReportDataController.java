@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +35,8 @@ import com.richard.java8use.service.ReportDataService;
 @Controller
 public class ReportDataController {
 
+	private Logger logger = LoggerFactory.getLogger(ReportDataController.class);
+	
 	@Autowired
 	private ReportDataService reportDataService;
 	
@@ -74,7 +78,10 @@ public class ReportDataController {
 		ModelAndView result = new ModelAndView("record");
 		ReportData temp = reportDataService.queryRecord(id);
 		if(temp != null) {
+			logger.info("Query record with using spring cache");
 			temp = reportDataService.queryRecord(id); // This query will use SpringCache and do not execute sql again
+			//logger.info("Query record but spring cache not work");
+			//temp = reportDataService.repeatQueryRecord(id);
 		} else {
 			temp = new ReportData();
 		}
