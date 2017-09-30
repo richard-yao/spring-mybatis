@@ -103,5 +103,7 @@
 		<aop:advisor advice-ref="druid-stat-interceptor"
 			pointcut-ref="druid-stat-pointcut" />
 	</aop:config>
+	
+	<bean id="exceptionHandler" class="com.richard.java8use.exception.DefineExceptionHandler"/>
 
 </beans>

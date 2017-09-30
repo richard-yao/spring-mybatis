@@ -103,6 +103,9 @@ public class ReportDataController {
 		if(result == null) {
 			result = new ArrayList<Map<String, String>>();
 		}
+		if(result.size() == 0) {
+			throw new NullPointerException();
+		}
 		return result;
 	}
 	
