@@ -1,5 +1,7 @@
 package com.richard.java8use.dao;
 
+import org.apache.ibatis.annotations.Update;
+
 import com.richard.java8use.model.Account;
 
 /**
@@ -9,4 +11,7 @@ import com.richard.java8use.model.Account;
 public interface DataDao {
 
 	int createAccountRecord(Account account);
+	
+	@Update("update account set value=#{value} where id=#{id}")
+	int updateAccountRecord(Account account);
 }

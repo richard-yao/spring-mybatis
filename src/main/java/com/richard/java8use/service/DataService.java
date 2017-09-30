@@ -20,4 +20,9 @@ public class DataService {
 		int result = dataDao.createAccountRecord(account);
 		return result == 0 ? false : true;
 	}
+	
+	public boolean updateAccountRecord(Account account) {
+		int result = dataDao.updateAccountRecord(account);
+		return result == 0 ? false : true;
+	}
 }

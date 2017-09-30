@@ -79,15 +79,20 @@
 	</resultMap>
 	<!-- for include use with id: queryCondition -->
 	<sql id="queryCondition">
-		where account_id=#{id}
+		<!-- Mybatis中#{}表示取程序传入变量，${}表示取自定义局部变量 -->
+		where account_id=#{id} and type=${type}
 	</sql>
 	<select id="queryDevicesWithAccountId" parameterType="string" resultType="SfUserDevice">
 		select id,account_id accountId,peer_id deviceId,type from sf_user_device 
-		<include refid="queryCondition"></include>
+		<include refid="queryCondition">
+			<property name="type" value="'T'"/>
+		</include>
 	</select>
 	<select id="countDevicesNumber" parameterType="string" resultType="int">
 		select count(*) from sf_user_device 
-		<include refid="queryCondition"></include>
+		<include refid="queryCondition">
+			<property name="type" value="'T'"/>
+		</include>
 	</select>
 	
 	<insert id="createNewSfRecords" parameterType="SfUser">
