@@ -8,8 +8,25 @@ public class TestThread extends Thread {
 
 	static String name = "richardyao";
 	
+	public TestThread() {}
+	
+	/**
+	 * 在jdk中Thread类调用Runnable的run方法是通过Thread自身的run方法来调用的，
+	 * 因此对于重写了Thread.run()的子类来说，如果不显式使用super.run()来调用父类的run方法，Runnable中run方法并不会执行
+	 * @param run
+	 */
+	public TestThread(Runnable run) {
+		super(run);
+	}
+	
 	public static void main(String[] args) {
-		TestThread thread = new TestThread();
+		TestThread thread = new TestThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				System.out.println("How to use this method!");
+			}
+		});
 		System.out.println("Start main thread time: " + System.currentTimeMillis());
 		thread.piggy(name);
 		for(int i=0;i<1000000;i++) {}
@@ -29,5 +46,6 @@ public class TestThread extends Thread {
 		for(int i=0;i<10;i++) {
 			name = name + i;
 		}
+		super.run();
 	}
 }
