@@ -6,13 +6,18 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	
+	<!-- 配置spring全局上下文配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:spring/spring-service.xml</param-value>
 	</context-param>
+	<!-- 初始化加载spring全局上下文 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	
+	<!-- 设置spring DispatcherServlet用于拦截初始化controller -->
 	<servlet>
 		<servlet-name>springMVC</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -27,6 +32,8 @@
 		<url-pattern>/</url-pattern> <!-- 匹配/login以及静态资源，但是对于*.jsp这种后缀型url并不会匹配 -->
 		<!-- <url-pattern>/*</url-pattern> 会匹配所有url:路径型的和后缀型的url(包括/login, *.jsp, *.js和 *.html等) -->
 	</servlet-mapping>
+	
+	<!-- 拦截request请求设置编码方式为UTF-8 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -43,6 +50,8 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- 设置默认静态资源后缀 -->
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.jpg</url-pattern>
@@ -61,6 +70,7 @@
 		<url-pattern>/news</url-pattern>
 	</servlet-mapping> -->
 	
+	<!-- 设置错误页面 -->
 	<error-page>
 		<error-code>404</error-code>
 		<location>/html/404.html</location>

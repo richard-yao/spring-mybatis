@@ -34,6 +34,7 @@
 				And Version like #{fuzzyVersion}
 			</if>
 			<if test="name != null">
+				<!-- mybatis中拼接参数是在sql的preparing阶段提交的，此时sql解析已经完成，因此不存在单引号等特殊字符解析带来的sql注入风险 -->
 				<bind name="fuzzyName" value="'%' + _parameter.getName() + '%'"/>
 				And Name like #{fuzzyName}
 			</if>
