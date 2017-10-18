@@ -57,6 +57,11 @@ public class GenerateToken {
 		public String getName() {
 			return name;
 		}
+		
+		@Override
+		public String toString() {
+			return "name parameter: " + getName();
+		}
 	}
 	
 	public class Card {
