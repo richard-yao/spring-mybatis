@@ -41,6 +41,7 @@ public class NewsServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		String indexPath = request.getServletContext().getRealPath("newslist.html");
 		File file = new File(indexPath);
+		request.getSession().setAttribute("session", "redis");
 		if(!file.exists()) {
 			// 创建freemarker.template.Configuration实例
 			Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);

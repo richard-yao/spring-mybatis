@@ -106,4 +106,10 @@
 	
 	<bean id="exceptionHandler" class="com.richard.java8use.exception.DefineExceptionHandler"/>
 
+	<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+	
+	<bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
+		<property name="hostName" value="${redis_host}" />
+		<property name="port" value="${redis_port}" />
+	</bean>
 </beans>
