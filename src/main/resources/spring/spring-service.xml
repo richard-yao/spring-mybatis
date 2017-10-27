@@ -106,7 +106,13 @@
 	
 	<bean id="exceptionHandler" class="com.richard.java8use.exception.DefineExceptionHandler"/>
 
-	<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+	<!-- 替代默认使用 cookie ,这里使用的是 httpheader来保存session-id -->
+	<bean id="httpSessonStrategy" class="org.springframework.session.web.http.HeaderHttpSessionStrategy"/>
+	
+	<bean id="redisHttpSessionConfiguration" class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" >
+		<property name="maxInactiveIntervalInSeconds" value="1800" />
+		<property name="httpSessionStrategy" ref="httpSessonStrategy" />
+	</bean>
 	
 	<bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
 		<property name="hostName" value="${redis_host}" />

@@ -17,6 +17,7 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	
+	<!-- 使用spring-session来代替默认的HttpSession管理 -->
 	<filter>
 		<filter-name>springSessionRepositoryFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -24,7 +25,13 @@
 	<filter-mapping>
 		<filter-name>springSessionRepositoryFilter</filter-name>
 		<url-pattern>/*</url-pattern>
+		<!-- 拦截从客户端发起的请求(默认级别) -->
 		<dispatcher>REQUEST</dispatcher>
+		<!-- 拦截request dispatcher的forward请求 -->
+		<!-- <dispatcher>FORWARD</dispatcher> -->
+		<!-- 拦截request dispatcher的include请求 -->
+		<!-- <dispatcher>INCLUDE</dispatcher> -->
+		<!-- 拦截通过<error-page>过来的请求 -->
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
 	

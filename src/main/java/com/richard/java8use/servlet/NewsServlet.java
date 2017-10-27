@@ -80,7 +80,8 @@ public class NewsServlet extends HttpServlet {
 			}
 		}
 		try {
-			request.getRequestDispatcher("newslist.html").forward(request,  response);
+			request.getRequestDispatcher("newslist.html").forward(request,  response); // forward将当前request内容替换为RequestDispatcher内容
+			//request.getRequestDispatcher("newslist.html").include(request, response); // include将RequestDispatcher内容包含到当前request中
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
